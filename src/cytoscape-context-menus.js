@@ -86,14 +86,14 @@ export function contextMenus(opts) {
   let bindHideCallbacks = () => {
     let onClick = (event) => {
       let cyContainer = cy.container();
-      // Hide only if click is outside of the Cytoscape area
-      if (!cyContainer.contains(event.target)) {
+      // Hide only if click is outside of the Cytoscape area and the context menu
+      if (!cyContainer.contains(event.target) && !cxtMenu.contains(event.target)) {
         cxtMenu.hide();
         setScratchProp('cxtMenuPosition', undefined);
       }
     };
 
-    document.body.addEventListener('mousedown', onClick);
+    document.addEventListener('mouseup', onClick);
     setScratchProp('hideOnNonCyClick', onClick);    
   };
 
@@ -185,7 +185,7 @@ export function contextMenus(opts) {
     cy.off('tapstart', getScratchProp('eventCyTapStart'));
     cy.off(options.evtType, getScratchProp('onCxttap'));
     cy.off('viewport', getScratchProp('onViewport'));
-    document.body.removeEventListener('click', getScratchProp('hideOnNonCyClick'));
+    document.body.removeEventListener('mouseup', getScratchProp('hideOnNonCyClick'));
     
     cxtMenu.parentNode.removeChild(cxtMenu);
     cxtMenu = undefined;
